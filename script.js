@@ -61,3 +61,37 @@ class SavingsAccount extends BankAccount {
     console.log(this.balance);
   }
 }
+
+
+class CurrentAccount extends BankAccount {
+  #overdraftLimit = 250;
+
+  constructor(accountNumber, ownerName, balance) {
+    super(accountNumber, ownerName, balance);
+  }
+
+  deposit(amount) {
+    this.balance += amount;
+    console.log(`${amount} deposited successfully.`);
+  }
+
+  withdraw(amount) {
+    if (amount <= 0) {
+      console.log("Declined! Withdrawal must be positive");
+      return;
+    }
+
+    if (this.balance - amount < -this.#overdraftLimit) {
+      console.log("Declined! Insufficient balance");
+      console.log(`You can only withdraw ${this.balance + this.#overdraftLimit}`);
+      return;
+    }
+
+    this.balance -= amount;
+    console.log(`${amount} withdrawn successfully`);
+  }
+
+  getBalance() {
+    console.log(this.balance);
+  }
+}
