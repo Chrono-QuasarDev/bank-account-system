@@ -126,7 +126,7 @@ li {
 /* ── Pages ──────────────────────── */
 .app {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 300px 1fr;
   grid-template-rows: 60px 1fr;
   height: 100vh;
 }
@@ -137,9 +137,54 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #1A1A18;
 }
 
 .header__left {
   display: flex;
   gap: var(--space-sm);
 }
+
+
+/* ── Side-bar ──────────── */
+.side-bar {
+  border-right: 1px solid #1A1A18;
+}
+.side-title__container {
+  padding: var(--space-sm);
+  border-bottom: 1px solid #1A1A18;
+}
+
+.side-bar__title {
+  font-size: var(--text-base);
+}
+
+.acc-element {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--space-sm);
+  border-left: 4px solid black;
+  border-bottom: 1px solid black;
+}
+
+.list-detail {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.list-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  border-radius: var(--radius-sm);
+  width: 40px;
+  height: 40px;
+}
+
+.list-icon svg {
+  fill: #FFFFFF;
+}
+
+.amount { font-weight: 600; }
