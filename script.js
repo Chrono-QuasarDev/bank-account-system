@@ -108,7 +108,7 @@ class FixedDeposit extends BankAccount {
 
   constructor(accountNumber, ownerName, principal, rate, tenure, compoundingFrequence = 4) {
 
-    super(accountNumber, ownerName,)
+    super(accountNumber, ownerName, principal)
 
     if (principal <= 0 || rate <= 0 || tenure <= 0) {
       console.log("Principal, rate, and tenure must be positive");
@@ -155,9 +155,9 @@ class FixedDeposit extends BankAccount {
     const today = new Date();
     if (today >= this.#maturityDate) {
       console.log(this.#maturityAmount);
+      return;
+    } else {
+      console.log(`Account matures on ${this.#maturityDate}. Current value not available.`);
     }
   }
 }
-
-const newFD = new FixedDeposit(1123, "Godfred", 45000, 7.8, 5);
-newFD.getBalance();

@@ -17,7 +17,71 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     
-    <h1>Bank Account Management System</h1>
+    <div class="app">
+      <div class="top-bar">
+        <div class="header__left">
+          <img src="./images/bank-svgrepo-com.svg" alt="Bank logo">
+          <h1>Bank account management</h1>
+        </div>
+        <div class="header__right">
+          <a href="#">+ New Account</a>
+        </div>
+      </div>
+
+      <div class="side-bar">
+        <h2>YOUR ACCOUNTS</h2>
+        <li>
+          <a href="#">
+            <img src="./images/piggy-bank-svgrepo-com.svg" alt="Piggy bank logo">
+            <div>
+              <h3>Godfred Kofigah</h3>
+              <p>Savings #1123</p>
+              <span>$12,500</span>
+            </div>
+          </a>
+        </li>
+      </div>
+      <div class="main">
+        <div class="stats">
+          <div class="acc-info">
+            <img src="./images/piggy-bank-svgrepo-com.svg" alt="Piggy bank logo">
+            <h3>Godfred Kofigah</h3>
+            <p>Savings Account #1123</p>
+          </div>
+
+          <div class="acc-stats">
+            <div class="acc-stats__balance">
+              <h3>Current balance</h3>
+              <p>$12,500</p>
+            </div>
+            <div class="acc-stats__min-balance">
+              <h3>Min.balance</h3>
+              <p>100</p>
+            </div>
+            <div class="acc-stats__interest-rate">
+              <h3>Interest rate</h3>
+              <p>10%</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="acc-details">
+          <div class="acc-details__actions"></div>
+          <div class="acc-details__history"></div>
+        </div>
+      </div>
+
+      <div class="dialog">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+
+        <label for="acc-num">Account Number</label>
+        <input type="number" name="acc-num" id="acc-num">
+
+        <label for="acc-balace">Balance</label>
+        <input type="number" name="acc-balance" id="acc-balance">
+      </div>
+    </div>
 
     <script src="script.js" async defer></script>
   </body>
