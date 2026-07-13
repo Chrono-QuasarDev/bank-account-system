@@ -34,7 +34,6 @@ class SavingsAccount extends BankAccount {
   }
 
   withdraw(amount) {
-    // Again just for fun
     if (amount < 0) {
       console.log("Dude!! Get a job");
       return;
@@ -43,7 +42,6 @@ class SavingsAccount extends BankAccount {
     if (this.balance === this.#minimumBalance || (this.balance - amount) < this.#minimumBalance) {
       console.log("Insufficient balance.");
 
-      // A little functionality to print smart error messages
       if ((this.balance - this.#minimumBalance) < 0) {
         console.log(`You can only withdraw ${this.balance - this.#minimumBalance}`);
       } else {
@@ -120,11 +118,9 @@ class FixedDeposit extends BankAccount {
     this.#compoundingFrequency = compoundingFrequence;
     this.#startDate = new Date();
 
-    // Calculating Maturity Date
     this.#maturityDate = new Date();
     this.#maturityDate.setFullYear(this.#startDate.getFullYear() + tenure);
 
-    // Calculate Maturity Amount: P(1 + r/n)^(nt)
     this.#maturityAmount = this.#principal * Math.pow((1 + this.#rate / this.#compoundingFrequency), (this.#compoundingFrequency * this.#tenure));
   }
 
@@ -161,3 +157,53 @@ class FixedDeposit extends BankAccount {
     }
   }
 }
+
+// UI Modal and Sidebar Management
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('modal');
+  const newAccountBtn = document.getElementById('new-account-btn');
+  const modalCloseBtn = document.getElementById('modal-close');
+  const createBtn = document.getElementById('create-btn');
+  const accElements = document.querySelectorAll('.acc-element');
+
+  // Modal open/close
+  newAccountBtn?.addEventListener('click', () => {
+    modal.classList.add('open');
+  });
+
+  modalCloseBtn?.addEventListener('click', () => {
+    modal.classList.remove('open');
+  });
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('open');
+    }
+  });
+
+  // Sidebar active state
+  accElements.forEach(element => {
+    element.addEventListener('click', () => {
+      accElements.forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+    });
+  });
+
+  // Create account form submission
+  createBtn?.addEventListener('click', () => {
+    const accType = document.getElementById('acc-type').value;
+    const name = document.getElementById('name').value;
+    const accNum = document.getElementById('acc-num').value;
+    const balance = document.getElementById('acc-balance').value;
+
+    if (name && accNum && balance) {
+      console.log(`Creating ${accType} account for ${name}`);
+      modal.classList.remove('open');
+      // Reset form
+      document.getElementById('acc-type').value = 'savings';
+      document.getElementById('name').value = '';
+      document.getElementById('acc-num').value = '';
+      document.getElementById('acc-balance').value = '';
+    }
+  });
+});
