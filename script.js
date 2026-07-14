@@ -299,7 +299,7 @@ const withdrawBtn = document.querySelector(".acc-details__withdrawal .btn");
 depositBtn.addEventListener("click", () => {
   const amount = document.querySelector(".acc-details__deposit input").value;
   if (amount && selectedAccount) {
-    selectedAccount.balance = parseFloat(selectedAccount.balance) + parseFloat(amount);
+    selectedAccount.deposit(parseFloat(amount));
     renderAccount();
     renderAccountInfo();
   }
@@ -309,7 +309,7 @@ depositBtn.addEventListener("click", () => {
 withdrawBtn.addEventListener("click", () => {
   const amount = document.querySelector(".acc-details__withdrawal input").value;
   if (amount && selectedAccount) {
-    selectedAccount.balance = parseFloat(selectedAccount.balance) - parseFloat(amount);
+    selectedAccount.withdraw(parseFloat(amount));
     renderAccount();
     renderAccountInfo();
   }
