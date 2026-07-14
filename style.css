@@ -269,9 +269,6 @@ li {
   max-width: none;
 }
 
-.dialog {
-  display: none;
-}
 
 input[type="text"],
 input[type="number"],

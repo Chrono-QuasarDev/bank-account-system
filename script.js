@@ -114,6 +114,7 @@ class FixedDeposit extends BankAccount {
 
     this.#principal = principal;
     this.#rate = rate / 100;
+    this.interestRate = rate;
     this.#tenure = tenure;
     this.#compoundingFrequency = compoundingFrequence;
     this.#startDate = new Date();
@@ -168,7 +169,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const newAccountBtn = document.getElementById('new-account-btn');
   const modalCloseBtn = document.getElementById('modal-close');
   const createBtn = document.getElementById('create-btn');
-  const accElements = document.querySelectorAll('.acc-element');
+  const accTypeSelect = document.getElementById('acc-type');
+  const fdFields = document.getElementById('fd-fields');
 
   // Modal open/close
   newAccountBtn?.addEventListener('click', () => {
@@ -185,12 +187,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Sidebar active state
-  accElements.forEach(element => {
-    element.addEventListener('click', () => {
-      accElements.forEach(el => el.classList.remove('active'));
-      element.classList.add('active');
-    });
+  // Show fixed deposit fields only when Fixed Deposit is selected
+  accTypeSelect?.addEventListener('change', (e) => {
+    if (fdFields) {
+      fdFields.style.display = e.target.value === 'fixed' ? 'flex' : 'none';
+    }
   });
 
   // Create account form submission
@@ -215,6 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('name').value = '';
       document.getElementById('acc-num').value = '';
       document.getElementById('acc-balance').value = '';
+      document.getElementById('fd-rate').value = '';
+      document.getElementById('fd-tenure').value = '';
+      if (fdFields) fdFields.style.display = 'none';
     }
   });
 });
@@ -228,7 +232,9 @@ function createAccount(accType, name, accNum, balance) {
     account = new SavingsAccount(accNum, name, numericBalance);
     account.type = 'Savings';
   } else if (accType === 'fixed') {
-    account = new FixedDeposit(accNum, name, numericBalance, 10, 1);
+    const rate = parseFloat(document.getElementById('fd-rate').value) || 7.8;
+    const tenure = parseFloat(document.getElementById('fd-tenure').value) || 1;
+    account = new FixedDeposit(accNum, name, numericBalance, rate, tenure);
     account.type = 'Fixed Deposit';
   } else if (accType === 'current') {
     account = new CurrentAccount(accNum, name, numericBalance);
@@ -278,11 +284,24 @@ function renderAccount() {
 
 
 function renderAccountInfo() {
-  if (!selectedAccount) return;
+  const emptyState = document.getElementById('empty-state');
+  const stats = document.querySelector('.stats');
+  const accDetails = document.querySelector('.acc-details');
+
+  if (!selectedAccount) {
+    if (emptyState) emptyState.style.display = 'flex';
+    if (stats) stats.style.display = 'none';
+    if (accDetails) accDetails.style.display = 'none';
+    return;
+  }
+
+  if (emptyState) emptyState.style.display = 'none';
+  if (stats) stats.style.display = 'flex';
+  if (accDetails) accDetails.style.display = 'grid';
 
   document.querySelector(".owner").textContent = selectedAccount.ownerName;
   document.querySelector(".account-number").textContent = `${selectedAccount.type} Account #${selectedAccount.accountNumber}`;
-  document.querySelector(".balance").textContent = `$${parseFloat(selectedAccount.balance).toLocaleString()}`;
+  document.querySelector(".stat-balance").textContent = `$${parseFloat(selectedAccount.balance).toLocaleString()}`;
 
   const minBalCard = document.querySelector(".min-balance");
   const interestCard = document.querySelector(".interest-rate");
@@ -295,7 +314,7 @@ function renderAccountInfo() {
     interestCard.textContent = "—";
   } else if (selectedAccount instanceof FixedDeposit) {
     minBalCard.textContent = "—";
-    interestCard.textContent = "7.8%";
+    interestCard.textContent = `${selectedAccount.interestRate || 7.8}%`;
   }
 }
 
@@ -308,9 +327,13 @@ const getBalanceBtn = document.getElementById('get-balance-btn');
 depositBtn.addEventListener("click", () => {
   const amount = document.querySelector(".acc-details__deposit input").value;
   if (amount && selectedAccount) {
-    selectedAccount.deposit(parseFloat(amount));
-    renderAccount();
-    renderAccountInfo();
+    try {
+      selectedAccount.deposit(parseFloat(amount));
+      renderAccount();
+      renderAccountInfo();
+    } catch (err) {
+      alert(err.message);
+    }
   }
   document.querySelector(".acc-details__deposit input").value = "";
 });
@@ -318,9 +341,13 @@ depositBtn.addEventListener("click", () => {
 withdrawBtn.addEventListener("click", () => {
   const amount = document.querySelector(".acc-details__withdrawal input").value;
   if (amount && selectedAccount) {
-    selectedAccount.withdraw(parseFloat(amount));
-    renderAccount();
-    renderAccountInfo();
+    try {
+      selectedAccount.withdraw(parseFloat(amount));
+      renderAccount();
+      renderAccountInfo();
+    } catch (err) {
+      alert(err.message);
+    }
   }
   document.querySelector(".acc-details__withdrawal input").value = "";
 });
@@ -329,3 +356,6 @@ getBalanceBtn?.addEventListener("click", () => {
   if (!selectedAccount) return;
   selectedAccount.getBalance();
 });
+
+// Render empty state on initial load
+renderAccountInfo();
