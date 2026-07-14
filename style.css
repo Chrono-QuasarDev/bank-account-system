@@ -137,7 +137,7 @@ li {
 /* ── Pages ──────────────────────── */
 .app {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 330px 1fr;
   grid-template-rows: 60px 1fr;
   height: 100vh;
 }
@@ -149,7 +149,7 @@ li {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--color-border);
-  padding: 0 var(--space-lg);
+  padding: 0 var(--space-md);
 }
 
 .header__left {
@@ -163,8 +163,7 @@ li {
   border-right: 1px solid var(--color-border);
 }
 .side-title__container {
-  padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md) var(--space-md) var(--space-sm) var(--space-md);
 }
 
 .side-bar__title {
@@ -172,24 +171,32 @@ li {
 }
 
 .acc-element {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: var(--space-sm);
+  padding: var(--space-md);
   border-left: 4px solid transparent;
-  border-bottom: 1px solid var(--color-border);
   width: 100%;
   text-align: left;
+  cursor: pointer;
 }
 
 .acc-element.active {
   border-left: 4px solid var(--color-accent);
   background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.acc-element.active .amount {
+  color: var(--color-accent);
 }
 
 .acc-element:hover:not(.active) {
   background: var(--color-surface);
   opacity: 0.8;
+}
+
+.acc-element__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .list-detail {
@@ -346,15 +353,15 @@ select:focus {
   grid-template-columns: 400px 1fr;
 }
 
-.acc-details__actions {
+.acc-details__actions,
+.acc-details__history {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-md);
 }
 
-.acc-actions { 
-  border-bottom: 1px solid var(--color-border); 
+.acc-actions {
   padding-bottom: var(--space-lg);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -395,3 +402,4 @@ select:focus {
   flex-direction: column;
   gap: var(--space-sm);
 }
+
