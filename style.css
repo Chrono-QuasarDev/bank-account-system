@@ -9,9 +9,9 @@
   --color-icon-bg: #1A1A18;
 
   /* ── Typography ──────────────────── */
-  --font-heading: 'Google Sans', serif;
-  --font-body:    'Google Sans', sans-serif;
-  --font-mono:    'Google Sans', monospace;
+  --font-heading: 'Inter', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'Inter', monospace;
 
   --text-xs:   0.75rem;   /* 12px */
   --text-sm:   0.875rem;  /* 14px */
@@ -359,6 +359,10 @@ select:focus {
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-md);
+}
+
+.acc-details__actions {
+  border-right: 1px solid var(--color-border);
 }
 
 .acc-actions {

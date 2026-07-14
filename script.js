@@ -159,18 +159,8 @@ class FixedDeposit extends BankAccount {
 }
 
 const container = document.querySelector(".acc-list");
-container.addEventListener("click", (e) => {
-  const clickedItem = e.target.closest('.acc-element');
-
-  if (!clickedItem) return;
-
-  document.querySelectorAll('.acc-element').forEach(el => el.classList.remove('active'));
-  clickedItem.classList.add('active');
-});
-
 const accounts = [];
 let selectedAccount = null;
-let accountType = null;
 
 // UI Modal and Sidebar Management
 document.addEventListener('DOMContentLoaded', function() {
@@ -214,8 +204,10 @@ document.addEventListener('DOMContentLoaded', function() {
     ) {
       // Store the data
       const account = createAccount(accType, name, accNum, balance);
+      selectedAccount = account;
       accounts.push(account);
       renderAccount();
+      renderAccountInfo();
       modal.classList.remove('open');
 
       // Reset form
@@ -230,16 +222,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function createAccount(accType, name, accNum, balance) {
   let account;
+  const numericBalance = parseFloat(balance);
 
-  if(accType === 'savings') {
-    account = new SavingsAccount(accNum, name, balance);
-    accountType = "Savings"
-  } else if(accType === 'fixed') {
-    account = new FixedDeposit(accNum, name, balance, 10, 1);
-    accountType = "Fixed"
-  } else if(accType === 'current') {
-    account = new CurrentAccount(accNum, name, balance);
-    accountType = "Current"
+  if (accType === 'savings') {
+    account = new SavingsAccount(accNum, name, numericBalance);
+    account.type = 'Savings';
+  } else if (accType === 'fixed') {
+    account = new FixedDeposit(accNum, name, numericBalance, 10, 1);
+    account.type = 'Fixed Deposit';
+  } else if (accType === 'current') {
+    account = new CurrentAccount(accNum, name, numericBalance);
+    account.type = 'Current';
   }
 
   return account;
@@ -252,6 +245,9 @@ function renderAccount() {
   accounts.forEach((account) => {
     const li = document.createElement('li');
     li.classList.add('acc-element');
+    if (selectedAccount === account) {
+      li.classList.add('active');
+    }
     li.innerHTML = `
       <div class="acc-element__wrap">
         <div class="list-detail">
@@ -263,7 +259,7 @@ function renderAccount() {
           </div>
           <div>
             <h3>${account.ownerName}</h3>
-            <p>${accountType} #${account.accountNumber}</p>
+            <p>${account.type} #${account.accountNumber}</p>
           </div>
         </div>
         <div class="amount">$${parseFloat(account.balance).toLocaleString()}</div>
@@ -271,8 +267,8 @@ function renderAccount() {
     `;
 
     li.addEventListener("click", () => {
-      // Handle account click event
       selectedAccount = account;
+      renderAccount();
       renderAccountInfo();
     });
 
@@ -284,17 +280,30 @@ function renderAccount() {
 function renderAccountInfo() {
   if (!selectedAccount) return;
 
-  // Implementation for rendering account info
   document.querySelector(".owner").textContent = selectedAccount.ownerName;
-
-  document.querySelector(".account-number").innerHTML = `${accountType} #${selectedAccount.accountNumber}`;
+  document.querySelector(".account-number").textContent = `${selectedAccount.type} Account #${selectedAccount.accountNumber}`;
   document.querySelector(".balance").textContent = `$${parseFloat(selectedAccount.balance).toLocaleString()}`;
+
+  const minBalCard = document.querySelector(".min-balance");
+  const interestCard = document.querySelector(".interest-rate");
+
+  if (selectedAccount instanceof SavingsAccount) {
+    minBalCard.textContent = "$10";
+    interestCard.textContent = "10%";
+  } else if (selectedAccount instanceof CurrentAccount) {
+    minBalCard.textContent = "Overdraft: $250";
+    interestCard.textContent = "—";
+  } else if (selectedAccount instanceof FixedDeposit) {
+    minBalCard.textContent = "—";
+    interestCard.textContent = "7.8%";
+  }
 }
 
 
 // Make deposit input field and button functional
 const depositBtn = document.querySelector(".acc-details__deposit .btn");
 const withdrawBtn = document.querySelector(".acc-details__withdrawal .btn");
+const getBalanceBtn = document.getElementById('get-balance-btn');
 
 depositBtn.addEventListener("click", () => {
   const amount = document.querySelector(".acc-details__deposit input").value;
@@ -314,4 +323,9 @@ withdrawBtn.addEventListener("click", () => {
     renderAccountInfo();
   }
   document.querySelector(".acc-details__withdrawal input").value = "";
+});
+
+getBalanceBtn?.addEventListener("click", () => {
+  if (!selectedAccount) return;
+  selectedAccount.getBalance();
 });
