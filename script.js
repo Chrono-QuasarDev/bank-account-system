@@ -1,4 +1,4 @@
-import { BankAccount, SavingsAccount, FixedDeposit, CurrentAccount } from "./accounts";
+import { BankAccount, SavingsAccount, FixedDeposit, CurrentAccount } from "./accounts.js";
 
 const container = document.querySelector(".acc-list");
 const accounts = [];
