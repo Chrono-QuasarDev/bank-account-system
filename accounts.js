@@ -1,4 +1,5 @@
 import { InvalidAmountError } from "./error/InvalidAmountError";
+import { InsufficientFundsError } from "./error/InsufficientFundsError";
 
 export class BankAccount {
   constructor(accountNumber, ownerName, balance) {
