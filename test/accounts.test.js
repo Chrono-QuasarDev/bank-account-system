@@ -1,4 +1,4 @@
-import { SavingsAccount } from "../accounts";
+import { CurrentAccount, SavingsAccount } from "../accounts";
 import { InvalidAmountError } from "../error/InvalidAmountError";
 import { InsufficientFundsError } from "../error/InsufficientFundsError";
 
@@ -24,3 +24,25 @@ describe("SavingsAccount", () => {
     expect(() => savAccount3.withdraw(390).toBe(10));
   })
 });
+
+describe('CurrentAccount', () => { 
+  it("increases the balance when depositing", () => {
+    const currAccount = new CurrentAccount("CA001", "Kofigah", 100);
+    expect(() => currAccount.deposit(100).toBe(200));
+  });
+
+  it("throws an error when amount to withdraw is negative", () => {
+    const currAccount = new CurrentAccount("CA002", "Kwesi", 100);
+    expect(() => currAccount.withdraw(-100).toThrow(InvalidAmountError));
+  });
+
+  it("throws an error when wrong amount is requested", () => {
+    const currAccount = new CurrentAccount("CA002", "Kwesi", 100);
+    expect(() => currAccount.withdraw(400).toThrow(InsufficientFundsError));
+  });
+
+  it("allows a withdraw that leaves exactly the overdraft", () => {
+    const currAccount = new CurrentAccount("CA002", "Kwesi", 100);
+    expect(() => currAccount.withdraw(350).toBe(-250));
+  });
+ });
