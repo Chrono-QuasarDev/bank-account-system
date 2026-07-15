@@ -404,3 +404,7 @@ select:focus {
   gap: var(--space-sm);
 }
 
+#fd-fields {
+  flex-direction: column;
+  gap: var(--space-sm);
+}

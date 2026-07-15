@@ -1,6 +1,6 @@
-import { InvalidAmountError } from "./error/InvalidAmountError";
-import { InsufficientFundsError } from "./error/InsufficientFundsError";
-import { AccountLockedError, InvalidOperationError, PartialWithdrawError } from "./error/FdErrors";
+import { InvalidAmountError } from "./error/InvalidAmountError.js";
+import { InsufficientFundsError } from "./error/InsufficientFundsError.js";
+import { AccountLockedError, InvalidOperationError, PartialWithdrawError } from "./error/FdErrors.js";
 
 export class BankAccount {
   constructor(accountNumber, ownerName, balance) {
