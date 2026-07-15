@@ -1,6 +1,7 @@
-import { CurrentAccount, SavingsAccount } from "../accounts";
+import { CurrentAccount, FixedDeposit, SavingsAccount } from "../accounts";
 import { InvalidAmountError } from "../error/InvalidAmountError";
 import { InsufficientFundsError } from "../error/InsufficientFundsError";
+import { AccountLockedError, InvalidOperationError, PartialWithdrawError } from "../error/FdErrors";
 
 describe("SavingsAccount", () => {
   it("increases the balance when depositing", () => {
@@ -49,3 +50,21 @@ describe('CurrentAccount', () => {
     expect(currAccount.balance).toBe(-250);
   });
  });
+
+
+describe("FixedDeposit", () => {
+  it("reject attempt to deposit after account is created", () => {
+    const newFd = new FixedDeposit("FD001", "Godfred", 45000, 7.8, 0.1);
+    expect(() => newFd.deposit(10000)).toThrow(InvalidOperationError);
+  });
+
+  it("reject attempt to withdraw before maturity date", () => {
+    const newFd = new FixedDeposit("FD001", "Godfred", 45000, 7.8, 1);
+    expect(() => newFd.withdraw(10000)).toThrow(AccountLockedError);
+  });
+
+  it("reject partial withdrawal upon account maturity", () => {
+    const newFd = new FixedDeposit("FD001", "Godfred", 45000, 7.8, -1);
+    expect(() => newFd.withdraw(10000)).toThrow(PartialWithdrawError);
+  });
+});

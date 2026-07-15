@@ -1,5 +1,6 @@
 import { InvalidAmountError } from "./error/InvalidAmountError";
 import { InsufficientFundsError } from "./error/InsufficientFundsError";
+import { AccountLockedError, InvalidOperationError, PartialWithdrawError } from "./error/FdErrors";
 
 export class BankAccount {
   constructor(accountNumber, ownerName, balance) {
@@ -120,25 +121,26 @@ export class FixedDeposit extends BankAccount {
   }
 
   deposit(amount) {
-    throw new Error("You cannot add funds to existing FD. Please create a new FD.");
+    throw new InvalidOperationError();
   }
 
   withdraw(amount) {
     const today = new Date();
 
     if (today < this.#maturityDate) {
-      throw new Error(`Premature withdrawal is not allowed. Account matures on ${this.#maturityDate.toDateString()}`);      
+      throw new AccountLockedError(this.accountNumber, this.#maturityDate);
     }
 
     if (amount > this.#maturityAmount) {
-      throw new Error("Insufficient funds in matured deposit.");
+      throw new InsufficientFundsError(this.accountNumber, amount, this.#maturityAmount);
     }
 
     if (amount === this.#maturityAmount) {
+      this.balance = 0;
       console.log(`Withdrawal of ${amount} successfull. FD closed`);
       return;
     } else {
-      throw new Error("Withdraw amount must match full maturity amount");
+      throw new PartialWithdrawError(this.#maturityAmount);
     }
   }
 
